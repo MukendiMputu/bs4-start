@@ -1,15 +1,18 @@
 import requests
 from bs4 import BeautifulSoup
 
-
-# Send an XHR-request and returns the response object
-def get_url(url):
-    return requests.get(url, headers={'Accept-Language': 'en-US,en;q=0.5'})
+html_soup = None
 
 
 # Extract the html content as text out of the response object
-def get_soup(http_response):
-    return BeautifulSoup(http_response.text, 'html.parser')
+def get_soup(url):
+    global html_soup
+    url_response = requests.get(url, headers={'Accept-Language': 'en-US,en;q=0.5'})
+    if url_response.status_code in range(200, 400):
+        # get soup from url_response object
+        return BeautifulSoup(url_response.text, 'html.parser')
+    else:
+        print(f"Requested URL [{url_response.url}] failed with code: {url_response.status_code}")
 
 
 # Extract the data byte
@@ -21,8 +24,3 @@ def get_data_byte(http_res):
 def clean_title(title_list):
     clean_list = [title.replace(" ", "_") for title in title_list]
     return clean_list
-
-
-# Match anchors with href containing the given string
-def clean_href_string(string_literal):
-    return string_literal.lower().replace(" ", "-")
