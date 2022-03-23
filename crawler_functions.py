@@ -18,9 +18,3 @@ def get_soup(url):
 # Extract the data byte
 def get_data_byte(http_res):
     return http_res.content
-
-
-# Clean the name of each product
-def clean_title(title_list):
-    clean_list = [title.replace(" ", "_") for title in title_list]
-    return clean_list
